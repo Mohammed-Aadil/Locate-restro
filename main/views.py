@@ -3,6 +3,7 @@ from django.contrib.gis.geos.point import Point
 from django.http.response import HttpResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework import status
 from rest_framework.authentication import SessionAuthentication, \
     BasicAuthentication, TokenAuthentication
 from rest_framework.authtoken.models import Token
@@ -41,7 +42,7 @@ def Auth_token(request):
                 t=Token.objects.get_or_create(user=usr)
                 print(t)
                 return HttpResponse(t)
-            return HttpResponse("Unauthorized User")
+            return HttpResponse("Unauthorized User",status=status.HTTP_401_UNAUTHORIZED)
         except Exception:
-            return HttpResponse("Unauthorized User")
-    return HttpResponse("400 - Bad Request")
+            return HttpResponse("Unauthorized User", status=status.HTTP_401_UNAUTHORIZED)
+    return HttpResponse("400 - Bad Request", status=status.HTTP_400_BAD_REQUEST)
