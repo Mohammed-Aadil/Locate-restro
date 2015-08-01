@@ -1,15 +1,14 @@
 from django.contrib.gis.db import models
 
-# Create your models here.
-class Zipcode(models.Model):
-    code=models.CharField(max_length=5)
-    poly=models.PolygonField()
-    object=models.GeoManager()
-    
-class Address(models.Model):
-    num = models.IntegerField()
-    street = models.CharField(max_length=100)
-    city = models.CharField(max_length=100)
-    state = models.CharField(max_length=2)
-    zipcode = models.ForeignKey(Zipcode)
-    objects = models.GeoManager()
+class restro(models.Model):
+    name=models.CharField(max_length=100)
+    mpoint=models.PointField(blank=True,null=True)
+    lat=models.DecimalField(max_digits=10,decimal_places=6,blank=True,null=True)
+    lon=models.DecimalField(max_digits=10,decimal_places=6, blank=True,null=True)
+    user=models.ForeignKey('auth.User', related_name='restro')
+    def save(self,*args,**kwargs):
+        self.lat=self.mpoint.y
+        self.lon=self.mpoint.x
+        super(restro,self).save(*args,**kwargs)
+    class Meta:
+        ordering = ('name',)

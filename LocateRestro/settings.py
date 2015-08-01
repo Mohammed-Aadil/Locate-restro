@@ -26,7 +26,7 @@ SECRET_KEY = '9+wn&4#jkjia&%pe+@wxugol_0r0k*63z821@fhmot^vep172('
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+"""
 #restFramework
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
@@ -35,7 +35,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ]
 }
-
+"""
 # Application definition
 
 INSTALLED_APPS = (
