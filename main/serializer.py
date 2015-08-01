@@ -1,9 +1,9 @@
-from rest_framework import serializers
+from rest_framework_gis.serializers import GeoFeatureModelSerializer
 from main.models import restro
 from django.contrib.auth.models import User
 
-class DataSerializer(serializers.ModelSerializer):
-    user=serializers.ReadOnlyField(source="user.username")
+class DataSerializer(GeoFeatureModelSerializer):
     class Meta:
         model=restro
-        fields=('id','name','mpoint','lat','lon','user')
+        geo_field="mpoint"
+        fields=('id','name','lat','lon','user')

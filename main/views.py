@@ -1,17 +1,18 @@
 from django.contrib.auth.models import User
+from django.contrib.gis.geos.point import Point
+from django.http.response import HttpResponse
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework.authentication import SessionAuthentication, \
     BasicAuthentication, TokenAuthentication
+from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, authentication_classes, \
     permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+
 from main.models import restro
 from main.serializer import DataSerializer
-from rest_framework.authtoken.models import Token
-from django.http.response import HttpResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.contrib.gis.geos.point import Point
 
 
 # Create your views here.
@@ -40,7 +41,6 @@ def Auth_token(request):
                 t=Token.objects.get_or_create(user=usr)
                 print(t)
                 return HttpResponse(t)
-            
             return HttpResponse("Unauthorized User")
         except Exception:
             return HttpResponse("Unauthorized User")
