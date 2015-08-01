@@ -1,19 +1,17 @@
 from django.contrib.auth.models import User
 from django.shortcuts import render
-from rest_framework import status
 from rest_framework.authentication import SessionAuthentication, \
     BasicAuthentication, TokenAuthentication
 from rest_framework.decorators import api_view, authentication_classes, \
     permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.status import HTTP_201_CREATED, HTTP_202_ACCEPTED, HTTP_203_NON_AUTHORITATIVE_INFORMATION
-
 from main.models import restro
 from main.serializer import DataSerializer
 from rest_framework.authtoken.models import Token
 from django.http.response import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.gis.geos.point import Point
 
 
 # Create your views here.
@@ -24,10 +22,13 @@ def index(request):
 @authentication_classes((SessionAuthentication, BasicAuthentication, TokenAuthentication))
 @permission_classes((IsAuthenticated,))
 def locate(request):
-    if(request.method=="GET" and User.objects.filter(username=request.user)):
-        r=restro.objects.all()
-        s=DataSerializer(r, many=True)
-        return Response(s.data)
+    if(request.method=="POST" and User.objects.filter(username=request.user)):
+        lat=float(request.POST.get('latitude'))
+        lon=float(request.POST.get('longitude'))
+        point=Point(lon,lat)
+        restrodata=restro.objects.filter(mpoint__distance_lte=(point,5000))
+        serializer=DataSerializer(restrodata, many=True)
+        return Response(serializer.data)
     
     
 @csrf_exempt

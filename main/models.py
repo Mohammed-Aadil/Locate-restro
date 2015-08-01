@@ -7,6 +7,7 @@ class restro(models.Model):
     lat=models.DecimalField(max_digits=10,decimal_places=6,blank=True,null=True)
     lon=models.DecimalField(max_digits=10,decimal_places=6, blank=True,null=True)
     user=models.ForeignKey('auth.User', related_name='restro')
+    objects = models.GeoManager()
     def save(self,*args,**kwargs):
         self.lat=self.mpoint.y
         self.lon=self.mpoint.x
