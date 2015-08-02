@@ -25,8 +25,12 @@ def index(request):
 @permission_classes((IsAuthenticated,))
 def locate(request):
     if(request.method=="POST" and User.objects.filter(username=request.user)):
-        lat=float(request.POST.get('latitude'))
-        lon=float(request.POST.get('longitude'))
+        lat,lot=0,0
+        try:
+            lat=float(request.POST.get('latitude'))
+            lon=float(request.POST.get('longitude'))
+        except Exception:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
         point=Point(lon,lat)
         restrodata=restro.objects.filter(mpoint__distance_lte=(point,5000))
         serializer=DataSerializer(restrodata, many=True)
